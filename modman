@@ -1,0 +1,4 @@
+app/code/community/Gls/Unibox             		app/code/community/Gls/Unibox
+app/design/adminhtml/default/default/layout/*   app/design/adminhtml/default/default/layout/
+app/design/adminhtml/default/default/template/* app/design/adminhtml/default/default/template/
+app/etc/modules/Gls_Unibox.xml                  app/etc/modules/Gls_Unibox.xml
