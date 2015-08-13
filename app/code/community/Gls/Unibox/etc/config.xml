@@ -169,4 +169,11 @@
 			</adminhtml>
 		</routers>
 	</admin>
+	<phpunit>
+		<suite>
+			<modules>
+				<Gls_Unibox />
+			</modules>
+		</suite>
+	</phpunit>
 </config>

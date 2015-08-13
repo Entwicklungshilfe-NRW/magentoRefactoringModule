@@ -1,6 +1,6 @@
 <?php
 
-class Gls_Unibox_Model_Unibox_ParserTest extends PHPUnit_Framework_TestCase {
+class Gls_Unibox_Test_Model_Unibox_ParserTest extends EcomDev_PHPUnit_Test_Case {
 
     public function testAddCheckDigit()
     {
