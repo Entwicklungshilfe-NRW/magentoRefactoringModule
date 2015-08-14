@@ -74,12 +74,12 @@ class Gls_Unibox_Model_Unibox_Parser {
 	public function preparePrint($id) {
 		$returnedtag = Mage::getModel('glsbox/shipment')->getCollection()->addFieldToFilter('id', $id)->getFirstItem()->getGlsMessage();
 		if($returnedtag === false || $returnedtag == "") { 
-			return false; 
+			return false;
 		} else 	{ 
 			$tags = $this->parseIncomingTag($returnedtag);
 			if(is_Array($tags)) {
 				$service = Mage::getModel('glsbox/shipment')->getCollection()->addFieldToFilter('id', $id)->getFirstItem()->getService();
-				if ($service == "business") {
+				if ($service == "business" || $service == "cash") {
 					$glsService = Mage::getModel('glsbox/label_gls_business'); 
 				}
 				elseif ($service == "express") {
@@ -89,7 +89,7 @@ class Gls_Unibox_Model_Unibox_Parser {
 					$glsService->importValues($tags);
 					return $glsService->getData();				
 				} else { 
-					return false; 
+					return false;
 				}
 			} else { 
 				return false;
@@ -325,7 +325,7 @@ class Gls_Unibox_Model_Unibox_Parser {
 		}
 	}
 	
-	private function addCheckDigit($number)
+	Public function addCheckDigit($number)
 	{
 		$_digitArray = str_split($number);
 		$_digitArray = array_reverse($_digitArray);
