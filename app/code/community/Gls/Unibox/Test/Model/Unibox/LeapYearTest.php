@@ -31,7 +31,7 @@ class Gls_Unibox_Test_Model_Unibox_LeapYearTest extends EcomDev_PHPUnit_Test_Cas
      * @dataProvider provideLeapYears
      */
     public function testLeapYearValidateExpectingTrue($value) {
-        $this->assertTrue($this->fixture($value), "Msg:" . $value);
+        $this->assertTrue($this->fixture->validate($value), "Msg:" . $value);
     }
 
     public static function provideNonLeapYears() {
