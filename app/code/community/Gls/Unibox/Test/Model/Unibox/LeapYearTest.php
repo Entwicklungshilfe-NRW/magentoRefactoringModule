@@ -37,15 +37,13 @@ class Gls_Unibox_Test_Model_Unibox_LeapYearTest extends EcomDev_PHPUnit_Test_Cas
     public static function provideNonLeapYears() {
         return [
             "2015" => [2015],
-            "1000" => [ 1000 ],
-            "2016" => [ 2016 ],
+            "1000" => [ 1000 ]
         ];
     }
 
     public static function provideLeapYears() {
         return [
-            [2016],
-            //[2017]
+            [2016]
         ];
     }
 }
