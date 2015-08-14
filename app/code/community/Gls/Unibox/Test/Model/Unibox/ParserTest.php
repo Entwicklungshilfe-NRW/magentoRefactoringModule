@@ -1,24 +1,38 @@
 <?php
 
 class Gls_Unibox_Test_Model_Unibox_ParserTest extends EcomDev_PHPUnit_Test_Case {
+    public $fixture;
 
     public function setUp() {
-        parent::setUp();
+        $this->fixture = Mage::getModel('glsbox/unibox_parser');
     }
 
     public function tearDown(){
-        parent::tearDown();
     }
 
     public function testAddCheckDigit()
     {
-        $parser = Mage::getModel('glsbox/unibox_parser');
-        $result = $parser->addCheckDigit(50717321053);
+        $result = $this->fixture->addCheckDigit(10);
+
+        $this->assertEquals(
+            $result,
+            108
+        );
+
+        $result = $this->fixture->addCheckDigit(11);
+
+        $this->assertEquals(
+            $result,
+            115
+        );
+
+        $result = $this->fixture->addCheckDigit(50717321053);
 
         $this->assertEquals(
             $result,
             507173210537
         );
+
     }
 
     public function testPreparePrint() {
@@ -33,7 +47,7 @@ class Gls_Unibox_Test_Model_Unibox_ParserTest extends EcomDev_PHPUnit_Test_Case 
         $this->assertEquals('cash',$service);
 
         //test printing function return value
-        $result = Mage::getModel('glsbox/unibox_parser')->preparePrint($glsShipment->getId());
+        $result = $this->fixture->preparePrint($glsShipment->getId());
         $this->assertEquals(64,count($result->getItems()));
     }
 
