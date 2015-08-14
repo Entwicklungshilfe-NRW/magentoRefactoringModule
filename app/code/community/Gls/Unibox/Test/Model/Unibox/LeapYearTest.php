@@ -6,13 +6,13 @@
  * @author  Roland Golla <roland.golla@wmdb.de>
  */
 
-class LeapYearTest extends EcomDev_PHPUnit_Test_Case {
+class Gls_Unibox_Test_Model_Unibox_LeapYearTest extends EcomDev_PHPUnit_Test_Case {
 
     public $fixture;
 
     public function setup()
     {
-        $this->fixture = new Gls_Unibox_Model_Unibox_LeapYear();
+        $this->fixture = Mage::getModel('glsbox/unibox_leapYear');
     }
 
     public function tearDown()
