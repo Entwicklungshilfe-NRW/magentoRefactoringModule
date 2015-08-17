@@ -71,31 +71,43 @@ class Gls_Unibox_Model_Unibox_Parser {
 		}
 	}
 
+	/**
+	 * @param $id
+	 * @return bool|mixed
+	 */
 	public function preparePrint($id) {
-		$returnedtag = Mage::getModel('glsbox/shipment')->getCollection()->addFieldToFilter('id', $id)->getFirstItem()->getGlsMessage();
-		if($returnedtag === false || $returnedtag == "") { 
-			return false;
-		} else 	{ 
-			$tags = $this->parseIncomingTag($returnedtag);
-			if(is_Array($tags)) {
-				$service = Mage::getModel('glsbox/shipment')->getCollection()->addFieldToFilter('id', $id)->getFirstItem()->getService();
-				if ($service == "business" || $service == "cash") {
-					$glsService = Mage::getModel('glsbox/label_gls_business'); 
-				}
-				elseif ($service == "express") {
-					$glsService = Mage::getModel('glsbox/label_gls_express'); 
-				}
-				if($glsService != null) { 
-					$glsService->importValues($tags);
-					return $glsService->getData();				
-				} else { 
-					return false;
-				}
-			} else { 
-				return false;
-			}		
+		if(!is_int($id)) {
+			throw new \InvalidArgumentException('no integer');
 		}
-	}	
+
+		/** @var Gls_Unibox_Model_Shipment $firstItem */
+		$firstItem = Mage::getModel('glsbox/shipment')->getCollection()->addFieldToFilter('id', $id)->getFirstItem();
+		$returnedTag = $firstItem->getGlsMessage();
+
+		if($returnedTag === false || $returnedTag === '') {
+			return false;
+		}
+
+		$tags = $this->parseIncomingTag($returnedTag);
+
+		if(!is_array($tags)) {
+			throw new \Exception($id . ' has no msg in gls box model.');
+		}
+
+		$service = $firstItem->getService();
+		if ($service == "business" || $service == "cash") {
+			$glsService = Mage::getModel('glsbox/label_gls_business');
+		}
+		elseif ($service == "express") {
+			$glsService = Mage::getModel('glsbox/label_gls_express');
+		}
+		if($glsService != null) {
+			$glsService->importValues($tags);
+			return $glsService->getData();
+		} else {
+			return false;
+		}
+	}
 	
 	public function prepareDelete($id) {
 		$item = Mage::getModel('glsbox/shipment')->getCollection()->addFieldToFilter('id', $id)->getFirstItem();

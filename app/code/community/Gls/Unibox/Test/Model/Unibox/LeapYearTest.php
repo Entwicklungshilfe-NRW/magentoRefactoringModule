@@ -43,7 +43,8 @@ class Gls_Unibox_Test_Model_Unibox_LeapYearTest extends EcomDev_PHPUnit_Test_Cas
 
     public static function provideLeapYears() {
         return [
-            [2016]
+            [2016],
+            ['husel']
         ];
     }
 }
