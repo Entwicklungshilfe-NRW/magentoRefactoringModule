@@ -72,30 +72,39 @@ class Gls_Unibox_Model_Unibox_Parser {
 	}
 
 	public function preparePrint($id) {
-		$returnedtag = Mage::getModel('glsbox/shipment')->getCollection()->addFieldToFilter('id', $id)->getFirstItem()->getGlsMessage();
-		if($returnedtag === false || $returnedtag == "") { 
-			return false;
-		} else 	{ 
-			$tags = $this->parseIncomingTag($returnedtag);
-			if(is_Array($tags)) {
-				$service = Mage::getModel('glsbox/shipment')->getCollection()->addFieldToFilter('id', $id)->getFirstItem()->getService();
-				if ($service == "business" || $service == "cash") {
-					$glsService = Mage::getModel('glsbox/label_gls_business'); 
-				}
-				elseif ($service == "express") {
-					$glsService = Mage::getModel('glsbox/label_gls_express'); 
-				}
-				if($glsService != null) { 
-					$glsService->importValues($tags);
-					return $glsService->getData();				
-				} else { 
-					return false;
-				}
-			} else { 
-				return false;
-			}		
+		if(!intval($id)) {
+			throw new \InvalidArgumentException('Id is no integer');
 		}
-	}	
+
+		$getFirstItem = Mage::getModel('glsbox/shipment')->getCollection()->addFieldToFilter('id', $id)->getFirstItem();
+		$returnedtag = $getFirstItem->getGlsMessage();
+		if($returnedtag === false || $returnedtag == "") { 
+			throw new \Exception('Id has no object ' . $id);
+		}
+
+		$tags = $this->parseIncomingTag($returnedtag);
+
+		if(!is_array($tags)) {
+			throw new \Exception('is no array');
+		}
+
+		$service = $getFirstItem->getService();
+		$glsService = null;
+		if ($service == "business" || $service == "cash") {
+			$glsService = Mage::getModel('glsbox/label_gls_business');
+		}
+
+		if ($service == "express") {
+			$glsService = Mage::getModel('glsbox/label_gls_express');
+		}
+
+		if($glsService === null) {
+			throw new \Exception('No service object');
+		}
+
+		$glsService->importValues($tags);
+		return $glsService->getData();
+	}
 	
 	public function prepareDelete($id) {
 		$item = Mage::getModel('glsbox/shipment')->getCollection()->addFieldToFilter('id', $id)->getFirstItem();
