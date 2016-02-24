@@ -71,31 +71,42 @@ class Gls_Unibox_Model_Unibox_Parser {
 		}
 	}
 
+	/**
+	 * @param int $id Shipment object id
+	 * @return bool
+	 *
+	 */
 	public function preparePrint($id) {
-		$returnedtag = Mage::getModel('glsbox/shipment')->getCollection()->addFieldToFilter('id', $id)->getFirstItem()->getGlsMessage();
-		if($returnedtag === false || $returnedtag == "") { 
-			return false;
-		} else 	{ 
-			$tags = $this->parseIncomingTag($returnedtag);
-			if(is_Array($tags)) {
-				$service = Mage::getModel('glsbox/shipment')->getCollection()->addFieldToFilter('id', $id)->getFirstItem()->getService();
-				if ($service == "business" || $service == "cash") {
-					$glsService = Mage::getModel('glsbox/label_gls_business'); 
-				}
-				elseif ($service == "express") {
-					$glsService = Mage::getModel('glsbox/label_gls_express'); 
-				}
-				if($glsService != null) { 
-					$glsService->importValues($tags);
-					return $glsService->getData();				
-				} else { 
-					return false;
-				}
-			} else { 
-				return false;
-			}		
+		if(!is_int($id)){
+			throw new InvalidArgumentException('no INT for service id');
+
 		}
-	}	
+		$firstItem = Mage::getModel('glsbox/shipment')->getCollection()->addFieldToFilter('id', $id)->getFirstItem();
+		$returnedTag = $firstItem->getGlsMessage();
+		if($returnedTag === false || $returnedTag == "") { 
+			return false;
+		}
+
+		$tags = $this->parseIncomingTag($returnedTag);
+		if(!is_Array($tags)) {
+			return false;
+		}
+
+		$service = $firstItem->getService();
+		$glsService = null;
+		if ($service == "business" || $service == "cash") {
+			$glsService = Mage::getModel('glsbox/label_gls_business');
+		}
+		elseif ($service == "express") {
+			$glsService = Mage::getModel('glsbox/label_gls_express');
+		}
+		if($glsService != null) {
+			$glsService->importValues($tags);
+			return $glsService->getData();
+		}
+		return false;
+
+	}
 	
 	public function prepareDelete($id) {
 		$item = Mage::getModel('glsbox/shipment')->getCollection()->addFieldToFilter('id', $id)->getFirstItem();
