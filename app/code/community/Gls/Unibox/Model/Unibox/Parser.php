@@ -72,29 +72,32 @@ class Gls_Unibox_Model_Unibox_Parser {
 	}
 
 	public function preparePrint($id) {
-		$returnedtag = Mage::getModel('glsbox/shipment')->getCollection()->addFieldToFilter('id', $id)->getFirstItem()->getGlsMessage();
-		if($returnedtag === false || $returnedtag == "") { 
-			return false;
-		} else 	{ 
-			$tags = $this->parseIncomingTag($returnedtag);
-			if(is_Array($tags)) {
-				$service = Mage::getModel('glsbox/shipment')->getCollection()->addFieldToFilter('id', $id)->getFirstItem()->getService();
+		if(!is_int($id)){
+			throw new \InvalidArgumentException('this fucking value is not a fucking number');
+		}
+		$printData = false;
+		$getFirstItem = Mage::getModel('glsbox/shipment')->getCollection()->addFieldToFilter('id', $id)->getFirstItem();
+		$returnedTag = $getFirstItem->getGlsMessage();
+		if(!empty($returnedTag)) {
+
+			$tags = $this->parseIncomingTag($returnedTag);
+			if(is_array($tags)) {
+				$service = $getFirstItem->getService();
+
 				if ($service == "business" || $service == "cash") {
-					$glsService = Mage::getModel('glsbox/label_gls_business'); 
+					$glsService = Mage::getModel('glsbox/label_gls_business');
 				}
 				elseif ($service == "express") {
-					$glsService = Mage::getModel('glsbox/label_gls_express'); 
+					$glsService = Mage::getModel('glsbox/label_gls_express');
 				}
-				if($glsService != null) { 
+
+				if($glsService) {
 					$glsService->importValues($tags);
-					return $glsService->getData();				
-				} else { 
-					return false;
+					$printData = $glsService->getData();
 				}
-			} else { 
-				return false;
-			}		
+			}
 		}
+		return $printData;
 	}	
 	
 	public function prepareDelete($id) {
