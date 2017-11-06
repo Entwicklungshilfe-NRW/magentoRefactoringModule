@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+<config>
+	<default>
+		<glsbox translate="label" module="glsbox">
+			<account translate="label" module="glsbox">
+				<kundennummer translate="label"/>
+			</account>
+			<labels translate="label" module="glsbox">
+				<autoinserttracking translate="label">0
+				</autoinserttracking>
+				<savetodisk translate="label">0</savetodisk>
+				<storage_folder translate="label"/>
+				<file_name_prefix translate="label"/>
+				<papersize translate="label">A4</papersize>
+				<beginx translate="label">0</beginx>
+				<beginy translate="label">0</beginy>
+			</labels>
+		</glsbox>
+		<carriers>
+			<gls>
+				<active>1</active>
+				<model>glsbox/shipping_carrier_gls</model>
+				<title>GLS</title>
+			</gls>
+		</carriers>
+	</default>
+	<modules>
+		<Testing_Carrier>
+			<version>0.5.0</version>
+		</Testing_Carrier>
+	</modules>
+	<global>
+		<models>
+			<glsbox>
+				<class>Testing_Carrier_Model</class>
+				<resourceModel>glsbox_mysql4</resourceModel>
+			</glsbox>
+			<glsbox_mysql4>
+				<class>Testing_Carrier_Model_Mysql4</class>
+				<entities>
+					<shipment>
+						<table>Testing_Carrier_shipment</table>
+					</shipment>
+					<client>
+						<table>Testing_Carrier_client</table>
+					</client>
+				</entities>
+			</glsbox_mysql4>
+		</models>
+		<resources>
+			<glsbox_setup>
+				<setup>
+					<module>Testing_Carrier</module>
+				</setup>
+				<connection>
+					<use>core_setup</use>
+				</connection>
+			</glsbox_setup>
+			<glsbox_write>
+				<use>core_write</use>
+			</glsbox_write>
+			<glsbox_read>
+				<use>core_read</use>
+			</glsbox_read>
+		</resources>
+		<helpers>
+			<glsbox>
+				<class>Testing_Carrier_Helper</class>
+			</glsbox>
+		</helpers>
+		<blocks>
+			<adminhtml>
+				<rewrite>
+					<sales_order_shipment_view>Testing_Carrier_Block_Adminhtml_Sales_Order_Shipment_View</sales_order_shipment_view>
+					<sales_order_shipment_view_form>Testing_Carrier_Block_Adminhtml_Sales_Order_Shipment_View_Form</sales_order_shipment_view_form>
+				</rewrite>
+			</adminhtml>
+			<glsbox>
+				<class>Testing_Carrier_Block</class>
+			</glsbox>
+		</blocks>
+		<sales>
+			<shipping>
+				<carriers>
+					<gls>
+						<class>Testing_Carrier_Model_Shipping_Carrier_Gls</class>
+					</gls>
+				</carriers>
+			</shipping>
+		</sales>
+	</global>
+	<adminhtml>
+		<layout>
+			<updates>
+				<glsbox>
+					<file>testing_carrier.xml</file>
+				</glsbox>
+			</updates>
+		</layout>
+		<menu>
+			<glsbox module="glsbox">
+				<title>GLS</title>
+				<sort_order>200</sort_order>
+				<children>
+					<shipment module="glsbox">
+						<title>Sendungen verwalten</title>
+						<sort_order>0</sort_order>
+						<action>adminhtml/glsshipment</action>
+					</shipment>
+					<client module="glsbox">
+						<title>Mandanten Pflegen</title>
+						<sort_order>1</sort_order>
+						<action>adminhtml/glsclient</action>
+					</client>
+				</children>
+			</glsbox>
+		</menu>
+		<acl>
+			<resources>
+				<admin>
+					<children>
+						<glsbox module="glsbox">
+							<title>Gls Unibox</title>
+							<sort_order>200</sort_order>
+							<children>
+								<shipment module="glsbox">
+									<title>Sendungen verwalten</title>
+									<sort_order>0</sort_order>
+								</shipment>
+								<client module="glsbox">
+									<title>Mandanten verwalten</title>
+									<sort_order>1</sort_order>
+								</client>
+							</children>
+						</glsbox>
+						<system>
+							<children>
+								<config>
+									<children>
+										<glsbox>
+											<title>GLS Unibox</title>
+										</glsbox>
+									</children>
+								</config>
+							</children>
+						</system>
+					</children>
+				</admin>
+			</resources>
+		</acl>
+    	<translate>
+      		<modules>
+		        <Testing_Carrier>
+		          <files>
+		            <default>Testing_Carrier.csv</default>
+		          </files>
+		        </Testing_Carrier>
+		      </modules>
+		</translate>
+	</adminhtml>
+	<admin>
+		<routers>
+			<adminhtml>
+				<args>
+					<modules>
+						<Testing_Carrier before="Mage_Adminhtml">Testing_Carrier_Adminhtml</Testing_Carrier>
+					</modules>
+				</args>
+			</adminhtml>
+		</routers>
+	</admin>
+	<phpunit>
+		<suite>
+			<modules>
+				<Testing_Carrier />
+			</modules>
+		</suite>
+	</phpunit>
+</config>

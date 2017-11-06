@@ -1,8 +1,8 @@
-GLS UNIBOX Magento Modul (Socket)
+Testing Carrier Magento Modul (Socket)
 Rev. 01 V0.1.0 unreleased
 /**
  * @category   Webvisum
- * @package    Gls_Unibox
+ * @package    Testing_Carrier
  * @author     Andreas Vogt <support@webvisum.de>
  */
 WICHTIG: Voraussetzung für diese Modul ist ein GLS UNI BOX Account.

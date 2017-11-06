@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Testing_Carrier>
+            <active>true</active>
+            <codePool>community</codePool>
+        </Testing_Carrier>
+    </modules>
+</config> 
